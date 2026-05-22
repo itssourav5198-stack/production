@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sohima Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: #7a6228;
+    --dark: #080808;
+    --dark-2: #101010;
+    --dark-3: #181818;
+    --dark-4: #242424;
+    --cream: #f2ead8;
+    --cream-dim: #8a826e;
+    --text: #d4cfc4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-logo span {
+    color: var(--cream);
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--cream-dim);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    font-weight: 400;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 4rem 6rem;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.03) 0%, transparent 60%),
+      linear-gradient(160deg, #0d0c0a 0%, #080808 50%, #0a0a0d 100%);
+  }
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    display: block;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 9vw, 9rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 2.5rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-sub {
+    max-width: 420px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .btn-primary {
+    padding: 0.9rem 2.5rem;
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-ghost {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+  }
+  .btn-ghost:hover { color: var(--gold); }
+  .btn-ghost .arrow { font-size: 1.1rem; }
+
+  .hero-scroll {
+    position: absolute;
+    right: 4rem;
+    bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    display: block;
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 8rem 4rem;
+    position: relative;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    margin-top: 4rem;
+  }
+  .about-visual {
+    position: relative;
+    height: 500px;
+  }
+  .about-frame {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: var(--dark-3);
+    overflow: hidden;
+  }
+  .about-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 70% at 50% 30%, rgba(201,168,76,0.08) 0%, transparent 60%);
+  }
+  .about-frame-inner {
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(201,168,76,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .about-frame-inner img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .about-icon {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 7rem;
+    color: rgba(201,168,76,0.12);
+    letter-spacing: 0.05em;
+    text-align: center;
+    line-height: 1;
+  }
+  .about-corner {
+    position: absolute;
+    width: 20px; height: 20px;
+  }
+  .about-corner.tl { top: -1px; left: -1px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+  .about-corner.tr { top: -1px; right: -1px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+  .about-corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+  .about-corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--cream-dim);
+    margin-bottom: 1.5rem;
+  }
+  .about-text p strong { color: var(--cream); font-weight: 400; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(201,168,76,0.12);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 3rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    display: block;
+  }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  .team-card {
+    background: var(--dark-3);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 2rem;
+    min-height: 220px;
+  }
+  .team-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+  .team-card p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+  }
+  .team-card span {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    margin-top: 0.4rem;
+    display: block;
+  }
+
+  /* SERVICES */
+  .services { background: var(--dark-2); }
+  .services-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 5rem;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+  .service-card {
+    background: var(--dark-2);
+    padding: 3.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+    cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { background: var(--dark-3); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 4rem;
+    color: rgba(201,168,76,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    transition: color 0.4s;
+  }
+  .service-card:hover .service-num { color: rgba(201,168,76,0.15); }
+  .service-icon {
+    width: 48px; height: 48px;
+    border: 1px solid rgba(201,168,76,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+    color: var(--gold);
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .service-desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+  }
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* WORKS */
+  .works-intro {
+    max-width: 520px;
+    margin-bottom: 5rem;
+  }
+  .works-intro p {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--cream-dim);
+    margin-top: 1.5rem;
+  }
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: rgba(201,168,76,0.08);
+  }
+  .work-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--dark-3);
+    min-height: 300px;
+    display: flex;
+    align-items: flex-end;
+    cursor: none;
+  }
+  .work-card.featured { grid-row: 1 / 3; min-height: 620px; }
+  .work-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .work-card:hover .work-bg { transform: scale(1.04); }
+  .work-bg-1 {
+    background:
+      radial-gradient(ellipse 80% 60% at 40% 60%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, #1a1208 0%, #0d0d0d 100%);
+  }
+  .work-bg-2 {
+    background:
+      radial-gradient(ellipse 70% 80% at 60% 40%, rgba(60,80,180,0.12) 0%, transparent 60%),
+      linear-gradient(200deg, #0a0c18 0%, #080808 100%);
+  }
+  .work-bg-3 {
+    background:
+      radial-gradient(ellipse 80% 70% at 30% 50%, rgba(140,40,40,0.1) 0%, transparent 60%),
+      linear-gradient(180deg, #120808 0%, #080808 100%);
+  }
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+  }
+  .work-content {
+    position: relative;
+    padding: 2.5rem;
+    z-index: 2;
+  }
+  .work-cat {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .work-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .work-card.featured .work-title { font-size: 2.5rem; }
+  .work-year {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: rgba(201,168,76,0.4);
+  }
+
+  /* PROCESS */
+  .process { background: var(--dark-2); }
+  .process-list {
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .process-list::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    left: 2rem; right: 2rem;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-dim), rgba(201,168,76,0.15), var(--gold-dim));
+  }
+  .process-item {
+    padding: 0 2.5rem 0 0;
+    position: relative;
+  }
+  .process-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: var(--dark-2);
+    margin-bottom: 2.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .process-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+    margin-bottom: 0.8rem;
+  }
+  .process-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+  .process-desc {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--cream-dim);
+  }
+
+  /* TESTIMONIAL */
+  .testimonial-section {
+    text-align: center;
+    padding: 8rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .testimonial-section::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 25rem;
+    color: rgba(201,168,76,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.5;
+    max-width: 780px;
+    margin: 0 auto 2.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .testimonial-author {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+  }
+  .tdot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .tdot.active { background: var(--gold); }
+
+  /* CONTACT */
+  .contact { background: var(--dark-2); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    margin-top: 4rem;
+  }
+  .contact-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .contact-info p {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .contact-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .contact-detail-icon {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .contact-detail-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.25rem;
+  }
+  .contact-detail-value {
+    font-size: 0.9rem;
+    color: var(--cream);
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-group label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: var(--dark-3);
+    border: 1px solid rgba(201,168,76,0.12);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    padding: 0.85rem 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--gold); }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--cream-dim); opacity: 0.5; }
+  .form-group textarea { min-height: 140px; resize: vertical; }
+  .form-group select option { background: var(--dark-3); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-submit {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2.5rem;
+    cursor: none;
+    transition: all 0.3s;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .btn-submit:hover {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    padding: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(201,168,76,0.08);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .footer-logo span { color: rgba(201,168,76,0.4); font-size: 0.9rem; display: block; letter-spacing: 0.12em; margin-top: 0.2rem; }
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.72rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes lineIn {
+    from { transform: scaleX(0); transform-origin: left; }
+    to { transform: scaleX(1); transform-origin: left; }
+  }
+  @keyframes scrollDot {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(8px); opacity: 0; }
+  }
+
+  .hero-eyebrow { animation: fadeIn 1s ease 0.3s both; }
+  .hero-title { animation: fadeUp 1.2s ease 0.5s both; }
+  .hero-sub { animation: fadeUp 1s ease 0.8s both; }
+  .hero-cta { animation: fadeUp 1s ease 1s both; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 0 2rem 5rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .works-grid { grid-template-columns: 1fr; }
+    .work-card.featured { min-height: 350px; }
+    .process-list { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .process-list::before { display: none; }
+    footer { flex-direction: column; gap: 2rem; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .about-visual { height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Sohima <span>Production</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#owner">Owner</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-eyebrow">Est. 2024 &nbsp;·&nbsp; Stories That Endure</div>
+  <h1 class="hero-title">
+    Where Words<br>
+    <em>Come Alive</em>
+  </h1>
+  <p class="hero-sub">A cinematic production house crafting books, audiobooks, and animations that move the human spirit.</p>
+  <div class="hero-cta">
+    <a href="#works" class="btn-primary">Explore Our Work</a>
+    <a href="#contact" class="btn-ghost">Start a Project <span class="arrow">→</span></a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Our Story</div>
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-frame">
+        <div class="about-corner tl"></div>
+        <div class="about-corner tr"></div>
+        <div class="about-corner bl"></div>
+        <div class="about-corner br"></div>
+        <div class="about-frame-inner">
+          <img src="../production logo.png" alt="Sohima Production House" class="about-image">
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <h2 class="section-title">Crafted with<br><em>Intention</em></h2>
+      <p>Sohima Production was born from a singular belief — that <strong>stories are the most powerful force in the universe</strong>. We give them form, voice, and motion.</p>
+      <p>From the first word on a page to the last frame of an animation, we obsess over craft. Our team of writers, narrators, directors, and animators collaborate to produce works that don't just entertain — they <strong>stay with you</strong>.</p>
+      <p>Whether it's a debut novel, a resonant audiobook, or a breathtaking animated world, every project receives the same commitment: <strong>uncompromising creative excellence.</strong></p>
+      <div class="about-stats">
+        <div>
+          <span class="stat-num">3</span>
+          <span class="stat-label">Titles Produced</span>
+        </div>
+        <div>
+          <span class="stat-num">5+</span>
+          <span class="stat-label">Certificates</span>
+        </div>
+        <div>
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Songs Released</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="owner">
+  <div class="section-label">Owner</div>
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-frame">
+        <div class="about-corner tl"></div>
+        <div class="about-corner tr"></div>
+        <div class="about-corner bl"></div>
+        <div class="about-corner br"></div>
+        <div class="about-frame-inner">
+          <img src="jhdbcj.jpeg" alt="Owner Photo of Sohima Production" class="about-image">
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <h2 class="section-title">Meet the Owner<br><em>Founder & Creative Lead</em></h2>
+      <p>The owner of Sohima Production is a storyteller, curator, and creative producer with a deep belief in the transformative power of narrative. They lead every project with passion, precision, and a commitment to cinematic storytelling.</p>
+      <p>With experience across books, audiobooks, and animation, they bridge creative vision and delivery, ensuring each production stays true to its voice while achieving polished, professional results.</p>
+      <p>Driven by the desire to craft enduring stories, they guide the team with an emphasis on emotional resonance, artistic integrity, and audience connection.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="team">
+  <div class="section-label">Team</div>
+  <div class="team-grid reveal">
+    <div class="team-card">
+      <h3>Mohima Shuklabaidya</h3>
+      <p>Creative Director & Story Architect. Mohima shapes the narrative direction for every project and ensures each story is built with emotional depth and visual purpose.</p>
+      <span>Co-Director</span>
+    </div>
+    <div class="team-card">
+      <h3>Himanshu Yadav</h3>
+      <p>Reviewer & Editor responsible for reviewing the book, audiobook script, and animation content while suggesting improvements and documenting necessary changes.</p>
+      <span>Editor</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="services-header reveal">
+    <div>
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our <em>Craft</em></h2>
+    </div>
+    <a href="#contact" class="btn-ghost">Commission a Project →</a>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <div class="service-icon">📖</div>
+      <h3 class="service-name">Book Production</h3>
+      <p class="service-desc">From manuscript to masterpiece. We guide authors through editorial development, cover design, typesetting, and publication — producing books built to last generations.</p>
+      <div class="service-tags">
+        <span class="tag">Fiction</span>
+        <span class="tag">Non-Fiction</span>
+        <span class="tag">Poetry</span>
+        <span class="tag">Anthologies</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <div class="service-icon">🎙</div>
+      <h3 class="service-name">Audiobook Production</h3>
+      <p class="service-desc">We transform written words into immersive listening experiences — with professional narration, studio-quality recording, and cinematic sound design that breathes life into every chapter.</p>
+      <div class="service-tags">
+        <span class="tag">Narration</span>
+        <span class="tag">Sound Design</span>
+        <span class="tag">Editing</span>
+        <span class="tag">Mastering</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <div class="service-icon">🎬</div>
+      <h3 class="service-name">Animation</h3>
+      <p class="service-desc">Bringing imaginative worlds to the screen. Our animation studio produces 2D and motion-graphic productions for stories that demand to be seen — not just heard.</p>
+      <div class="service-tags">
+        <span class="tag">2D Animation</span>
+        <span class="tag">Motion Graphics</span>
+        <span class="tag">Story Adaptations</span>
+        <span class="tag">Short Films</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="works-intro reveal">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">Selected <em>Works</em></h2>
+    <p>A glimpse into the stories we've had the privilege of bringing into the world.</p>
+  </div>
+  <div class="works-grid reveal">
+    <div class="work-card featured">
+      <div class="work-bg work-bg-1"></div>
+      <div class="work-overlay"></div>
+      <span class="work-year">2026</span>
+      <div class="work-content">
+        <div class="work-cat">Book</div>
+        <h3 class="work-title">Mamta Ki Aanchal</h3>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-bg work-bg-2"></div>
+      <div class="work-overlay"></div>
+      <span class="work-year">2026</span>
+      <div class="work-content">
+        <div class="work-cat">Animation</div>
+        <h3 class="work-title">The Fort of Bhangarh</h3>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-bg work-bg-3"></div>
+      <div class="work-overlay"></div>
+      <span class="work-year">2026</span>
+      <div class="work-content">
+        <div class="work-cat">Book</div>
+        <h3 class="work-title">Uski Aakhein</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section id="process" class="process">
+  <div class="reveal">
+    <div class="section-label">How We Work</div>
+    <h2 class="section-title">The <em>Process</em></h2>
+  </div>
+  <div class="process-list reveal">
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-num">01</div>
+      <h3 class="process-name">Discovery</h3>
+      <p class="process-desc">We begin by listening. Understanding your vision, your voice, and the story you are trying to tell is the most important step of any project.</p>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-num">02</div>
+      <h3 class="process-name">Development</h3>
+      <p class="process-desc">Our creative team collaborates with you to develop the project — structuring the narrative, building the aesthetic, and defining the production plan.</p>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-num">03</div>
+      <h3 class="process-name">Production</h3>
+      <p class="process-desc">With a clear direction set, we execute with precision — writing, recording, designing, and animating — with you involved at every milestone.</p>
+    </div>
+    <div class="process-item">
+      <div class="process-dot"></div>
+      <div class="process-num">04</div>
+      <h3 class="process-name">Launch</h3>
+      <p class="process-desc">We deliver a finished work ready for the world — polished, formatted, and supported through release across all relevant platforms and markets.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIAL -->
+<div class="testimonial-section reveal">
+  <p class="testimonial-text" id="testimonial-text">
+    "Working with Sohima was a revelation. They didn't just produce my book — they understood the soul of it. The audiobook brought tears to my eyes."
+  </p>
+  <div class="testimonial-author" id="testimonial-author">— Aryan Mehta, Author</div>
+  <div class="testimonial-dots">
+    <div class="tdot active" onclick="changeTestimonial(0)"></div>
+    <div class="tdot" onclick="changeTestimonial(1)"></div>
+    <div class="tdot" onclick="changeTestimonial(2)"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="section-label">Get In Touch</div>
+  <div class="contact-grid">
+    <div class="reveal">
+      <h2 class="section-title">Let's Create<br><em>Something</em><br>Together</h2>
+      <div style="margin-top:2.5rem">
+        <div class="contact-detail">
+          <div class="contact-detail-icon">✉</div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-value">sohimaproduction@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div>
+            <div class="contact-detail-label">Location</div>
+            <div class="contact-detail-value">Gurgaon,Haryana, India</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <div>
+            <div class="contact-detail-label">Phone</div>
+            <div class="contact-detail-value">+91 8595069417</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Project Type</label>
+        <select>
+          <option value="">Select a service</option>
+          <option>Book Production</option>
+          <option>Audiobook Production</option>
+          <option>Animation</option>
+          <option>Multiple Services</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell Us About Your Project</label>
+        <textarea placeholder="Briefly describe your vision..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">
+        Send Enquiry <span>→</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    Sohima Production
+    <span>© 2025 All Rights Reserved</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">Crafting Stories That Endure</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => obs.observe(r));
+
+  // Testimonials
+  const testimonials = [
+    { text: '"Working with Sohima was a revelation. They didn\'t just produce my book — they understood the soul of it. The audiobook brought tears to my eyes."', author: '— Aryan Mehta, Author' },
+    { text: '"The animation Sohima created for our story exceeded every expectation. It felt like they had read our minds and painted it onto the screen."', author: '— Priya Sharma, Creative Director' },
+    { text: '"Sohima Production treated our project with such care and craft. The final audiobook felt like a film for the ears — truly cinematic."', author: '— Kabir Nair, Publisher' }
+  ];
+  function changeTestimonial(i) {
+    document.getElementById('testimonial-text').textContent = testimonials[i].text;
+    document.getElementById('testimonial-author').textContent = testimonials[i].author;
+    document.querySelectorAll('.tdot').forEach((d, j) => d.classList.toggle('active', j === i));
+  }
+  let ti = 0;
+  setInterval(() => { ti = (ti + 1) % 3; changeTestimonial(ti); }, 5000);
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit');
+    btn.textContent = 'Message Sent ✓';
+    btn.style.background = 'rgba(201,168,76,0.15)';
+    btn.style.cursor = 'none';
+  }
+</script>
+</body>
+</html>
